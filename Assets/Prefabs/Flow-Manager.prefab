@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6013299872389664903}
-  - component: {fileID: 6013299872389664897}
+  - component: {fileID: 715159591611161400}
   - component: {fileID: 6013299872389664896}
   m_Layer: 0
   m_Name: Flow-Manager
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6013299872389664897
+--- !u!114 &715159591611161400
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,10 +41,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6013299872389664902}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aafaa98f1116f4795441d4bbbd0542, type: 3}
+  m_Script: {fileID: 11500000, guid: b734012f0be4aa649ad56355100d7d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallbackSceneInformation: {fileID: 11400000, guid: 2db97e255d1ec9f4ebb5e8b2b8c20be1, type: 2}
 --- !u!114 &6013299872389664896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,7 +56,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f81a29199001c4687b9b626cc3b51e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Story01Complete: 0
-  Story02Complete: 0
-  Gameplay01Complete: 0
-  Gameplay02Complete: 0
+  FallbackSceneInformation: {fileID: 0}
+  FallbackSceneFlag: 0

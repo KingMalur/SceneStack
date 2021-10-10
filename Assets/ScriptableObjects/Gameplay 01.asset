@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Gameplay 01
   m_EditorClassIdentifier: 
   SceneName: Scene 02
+  AlwaysLoadScene: 0
   PrefabToLoad: {fileID: 2262514865436179622, guid: 2dd67df3f45638748b96ae67f2e8c4f6, type: 3}
   ProgressionFlagToSet: 3
   SomeFakeInt: 1

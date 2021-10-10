@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SceneStack : MonoBehaviour
+public class SceneStack
 {
 	private Stack<SceneInformation> sceneInformationStack = new Stack<SceneInformation>();
 

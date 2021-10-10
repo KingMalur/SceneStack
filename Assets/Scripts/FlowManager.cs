@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(SceneStack))]
+[RequireComponent(typeof(DDOL))]
 public class FlowManager : MonoBehaviour
 {
-	public string ID;
-
 	public static FlowManager Instance;
+
+	[Header("Fallback Scene Information")]
 	public SceneInformation FallbackSceneInformation;
 	public ProgressionFlag FallbackSceneFlag = ProgressionFlag.None;
 
-	[Header("Progression-Control")]
-	Dictionary<ProgressionFlag, bool> ProgressionFlags;
-
-	private SceneStack sceneStack;
+	private Dictionary<ProgressionFlag, bool> ProgressionFlags;
+	private SceneStack sceneStack = new SceneStack();
 	private SceneInformation currentSceneInformation;
+
+	public bool CurrentSceneIsFallbackScene => GetCurrentScene() == GetFallbackScene();
 
 	private void Awake()
 	{
@@ -25,13 +25,61 @@ public class FlowManager : MonoBehaviour
 		else
 			Instance = this;
 
-		DontDestroyOnLoad(this);
-
 		FakeLoadProgressionFlags();
-		sceneStack = GetComponent<SceneStack>();
-		currentSceneInformation = FallbackSceneInformation;
+		SetCurrentScene(GetFallbackScene());
 	}
 
+	public void AddSceneFlow(SceneFlow sceneFlow)
+	{
+		AbortSceneFlow();
+		sceneStack.Push(sceneFlow.SceneInformation);
+	}
+
+	public void AddSceneToFlow(SceneInformation sceneInformation)
+	{
+		sceneStack.Push(sceneInformation);
+	}
+
+	public SceneInformation GetSceneFromFlow()
+	{
+		// I know I could use the variables but it looks cleaner & is nice to read
+		SetCurrentScene(sceneStack.Pop() ?? GetFallbackScene());
+
+		if (CurrentSceneIsFallbackScene)
+			return GetCurrentScene();
+
+		if (GetCurrentScene().AlwaysLoadScene)
+			return GetCurrentScene();
+
+		bool flagValue = false;
+		if (ProgressionFlags.TryGetValue(currentSceneInformation.ProgressionFlagToSet, out flagValue) && flagValue)
+			return GetSceneFromFlow();
+
+		return GetCurrentScene();
+	}
+
+	public void AbortSceneFlow()
+	{
+		sceneStack.Clear();
+		SetCurrentScene(GetFallbackScene());
+	}
+
+	public SceneInformation GetCurrentScene()
+	{
+		return currentSceneInformation;
+	}
+
+	private void SetCurrentScene(SceneInformation sceneInformation)
+	{
+		currentSceneInformation = sceneInformation;
+	}
+
+	private SceneInformation GetFallbackScene()
+	{
+		return FallbackSceneInformation;
+	}
+
+	// TODO: Make private for real application
 	public void FakeLoadProgressionFlags()
 	{
 		ProgressionFlags = Enum.GetValues(typeof(ProgressionFlag))
@@ -44,38 +92,9 @@ public class FlowManager : MonoBehaviour
 		SetProgressionFlag(currentSceneInformation.ProgressionFlagToSet);
 	}
 
-	public void SetProgressionFlag(ProgressionFlag progressionFlag)
+	private void SetProgressionFlag(ProgressionFlag progressionFlag)
 	{
 		if (ProgressionFlags.ContainsKey(progressionFlag))
 			ProgressionFlags[progressionFlag] = true;
-	}
-
-	public void AccessNextSceneInformation()
-	{
-		currentSceneInformation = sceneStack.Pop() ?? FallbackSceneInformation;
-
-		if (currentSceneInformation.ProgressionFlagToSet == FallbackSceneFlag)
-			return;
-
-		bool flagValue = false;
-		if (ProgressionFlags.TryGetValue(currentSceneInformation.ProgressionFlagToSet, out flagValue) && flagValue)
-			AccessNextSceneInformation();
-	}
-
-	public SceneInformation GetCurrentSceneInformation()
-	{
-		return currentSceneInformation;
-	}
-
-	public void AddSceneInformation(SceneInformationList sceneInformationList)
-	{
-		sceneStack.Clear();
-		sceneStack.Push(sceneInformationList.ListOfSceneInformation);
-	}
-
-	public void AbortSceneFlow()
-	{
-		sceneStack.Clear();
-		AccessNextSceneInformation();
 	}
 }

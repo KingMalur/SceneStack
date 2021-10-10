@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Fallback
   m_EditorClassIdentifier: 
   SceneName: Main Menu
+  PrefabToLoad: {fileID: 9138861340813309701, guid: 282fe7c70436b6648b4a8265716af2d1, type: 3}
+  ProgressionFlagToSet: 0

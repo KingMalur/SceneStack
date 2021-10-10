@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Story 01
   m_EditorClassIdentifier: 
   SceneName: Scene 01
+  AlwaysLoadScene: 0
   PrefabToLoad: {fileID: 2967468850588058757, guid: e4060e6c3b3292447b8d7ba55a9274ea, type: 3}
   ProgressionFlagToSet: 1
   SomeFakeString: This text is really important!

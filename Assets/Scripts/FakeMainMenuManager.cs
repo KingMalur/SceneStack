@@ -4,9 +4,15 @@ using UnityEngine.SceneManagement;
 
 public class FakeMainMenuManager : MonoBehaviour
 {
-	public void AddSceneInformation(SceneInformationList sceneInformationList)
+	private void Start()
 	{
-		FlowManager.Instance.AddSceneInformation(sceneInformationList);
+		SceneInformation currentScene = FlowManager.Instance.GetCurrentScene();
+		Instantiate(currentScene.PrefabToLoad, transform);
+	}
+
+	public void AddSceneFlow(SceneFlow sceneFlow)
+	{
+		FlowManager.Instance.AddSceneFlow(sceneFlow);
 	}
 
 	public void ResetProgressionFlags()
@@ -16,20 +22,17 @@ public class FakeMainMenuManager : MonoBehaviour
 
 	public void FakeGameStartButton()
 	{
-		StartCoroutine(FakeGameLoad());
+		StartCoroutine(FakeSceneLoad());
 	}
 
-	private IEnumerator FakeGameLoad()
+	private IEnumerator FakeSceneLoad()
 	{
-		string sceneName = FlowManager.Instance.GetCurrentSceneInformation().SceneName;
-		FlowManager.Instance.AccessNextSceneInformation();
-		string newSceneName = FlowManager.Instance.GetCurrentSceneInformation().SceneName;
-		if (sceneName == newSceneName)
+		string sceneName = FlowManager.Instance.GetSceneFromFlow().SceneName;
+		if (FlowManager.Instance.CurrentSceneIsFallbackScene)
 			yield break;
 
-		var async = SceneManager.LoadSceneAsync(newSceneName);
+		var async = SceneManager.LoadSceneAsync(sceneName);
 		async.allowSceneActivation = true;
-
 		while (!async.isDone)
 		{
 			if (async.progress >= 0.9f && !async.allowSceneActivation)

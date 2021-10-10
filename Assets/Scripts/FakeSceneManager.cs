@@ -10,14 +10,14 @@ public class FakeSceneManager : MonoBehaviour
 
 	private void Start()
 	{
-		SceneInformation currentScene = FlowManager.Instance.GetCurrentSceneInformation();
+		SceneInformation currentScene = FlowManager.Instance.GetCurrentScene();
 		DataText.text = currentScene.PrefabToLoad.name;
 		Instantiate(currentScene.PrefabToLoad, transform);
 	}
 
 	public void FakeContinueButton()
 	{
-		StartCoroutine(FakeGameLoad());
+		StartCoroutine(FakeSceneLoad());
 	}
 
 	public void FakeSetProgressionFlagOfCurrentScene()
@@ -28,17 +28,15 @@ public class FakeSceneManager : MonoBehaviour
 	public void FakeGoToMainMenu()
 	{
 		FlowManager.Instance.AbortSceneFlow();
-		StartCoroutine(FakeGameLoad());
+		StartCoroutine(FakeSceneLoad());
 	}
 
-	private IEnumerator FakeGameLoad()
+	private IEnumerator FakeSceneLoad()
 	{
-		FlowManager.Instance.AccessNextSceneInformation();
-		string sceneName = FlowManager.Instance.GetCurrentSceneInformation().SceneName;
+		string sceneName = FlowManager.Instance.GetSceneFromFlow().SceneName;
 
 		var async = SceneManager.LoadSceneAsync(sceneName);
 		async.allowSceneActivation = true;
-
 		while (!async.isDone)
 		{
 			if (async.progress >= 0.9f && !async.allowSceneActivation)
