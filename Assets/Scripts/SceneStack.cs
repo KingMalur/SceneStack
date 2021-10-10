@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SceneStack : MonoBehaviour
@@ -8,14 +9,26 @@ public class SceneStack : MonoBehaviour
 	public void Push(List<SceneInformation> sceneInformationList, bool reverseListBeforePush = true)
 	{
 		if (reverseListBeforePush)
-			sceneInformationList.Reverse();
+			foreach (SceneInformation sceneInformation in sceneInformationList.Reverse<SceneInformation>())
+				Push(sceneInformation);
+		else
+			foreach (SceneInformation sceneInformation in sceneInformationList)
+				Push(sceneInformation);
+	}
 
-		foreach (SceneInformation sceneInformation in sceneInformationList)
-			sceneInformationStack.Push(sceneInformation);
+	public void Push(SceneInformation sceneInformation)
+	{
+#if UNITY_EDITOR
+		Debug.Log("Push: " + sceneInformation.SceneName);
+#endif
+		sceneInformationStack.Push(sceneInformation);
 	}
 
 	public SceneInformation Pop()
 	{
+#if UNITY_EDITOR
+		Debug.Log("Pop: " + (sceneInformationStack.Count != 0 ? sceneInformationStack.Peek().SceneName : "NULL"));
+#endif
 		if (sceneInformationStack.Count != 0)
 			return sceneInformationStack.Pop();
 
