@@ -14,7 +14,7 @@ The **Flow-Manager checks for Progression-Flags** before loading the next scene 
 
 I also added some _fluff_ (UI, Background-Data, Progression-Flags, etc.) to better bring my point across.
 
-You can see this behaviour in action in the scenes **Main-Menu** **Scene 01** & **Scene 02**.\
+You can see this behaviour in action in the scenes **Main-Menu**, **Scene 01** & **Scene 02**.\
 The **Main-Menu** offers options to load some scenes. Think about them as Story- & Gameplay-segments.
 
 **You want to load scenes in Unity3D in a specific order and need some information about what to do in them too?**\
